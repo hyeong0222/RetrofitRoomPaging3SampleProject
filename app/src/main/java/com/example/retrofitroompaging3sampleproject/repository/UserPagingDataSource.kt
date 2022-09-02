@@ -18,7 +18,7 @@ class UserPagingDataSource(
         return try {
             val data = mutableListOf<User>()
             val page = params.key ?: 1
-            
+
             runCatching {
                 apiService.getSearchUserResult(searchQuery, page)
             }.onSuccess { searchUser ->
@@ -31,9 +31,6 @@ class UserPagingDataSource(
 
             val prevKey = if (page == 1) null else page.minus(1)
             val nextKey = if (data.isEmpty()) null else page.plus(1)
-
-
-            userDao.insertUsers(data)
 
             LoadResult.Page(
                 data = data,

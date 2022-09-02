@@ -15,8 +15,4 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     fun getSearchUserResult(searchQuery: String?): Flow<PagingData<User>> {
         return repository.getSearchUserResultByPaging(searchQuery).cachedIn(viewModelScope)
     }
-
-//    suspend fun insertUsers(users: List<User>) {
-//        repository.insertUsers(users)
-//    }
 }
