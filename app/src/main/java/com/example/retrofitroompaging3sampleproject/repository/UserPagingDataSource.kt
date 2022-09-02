@@ -16,9 +16,18 @@ class UserPagingDataSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
         return try {
+            val data = mutableListOf<User>()
             val page = params.key ?: 1
-            val response = apiService.getSearchUserResult(searchQuery, page)
-            val data = response?.users ?: emptyList()
+            
+            runCatching {
+                apiService.getSearchUserResult(searchQuery, page)
+            }.onSuccess { searchUser ->
+                searchUser?.users?.let {
+                    data.addAll(it)
+                }
+            }.onFailure { error ->
+                Log.e("", error.message.toString())
+            }
 
             val prevKey = if (page == 1) null else page.minus(1)
             val nextKey = if (data.isEmpty()) null else page.plus(1)
